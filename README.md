@@ -4,8 +4,8 @@ Stores recipes, generates meal plans, creates shopping lists, and displays cooki
 
 ## Database Schema
 
-Primary Keys: `recipe_id`, `ingredient_id`
-Fact Tables: `recipes`, `ingredients`
+Primary Keys: `recipe_id`, `ingredient_id`, `unit_id`
+Fact Tables: `recipes`, `ingredients`, `units`
 Dimension Tables: `recipe_instructions`, `recipe_ingredients`
 
 Parenthetical items are potential, unimplemented, additions. 
@@ -32,6 +32,10 @@ Parenthetical items are potential, unimplemented, additions.
 - recipe_ingredients
     - recipe_id
     - ingredient_id
+    - unit_id
     - quantity
-    - unit
 
+- units
+    - id
+    - name
+    - plural

@@ -19,11 +19,12 @@ CREATE_RECIPE_INGREDIENTS_TABLE_SQL = """
     CREATE TABLE recipe_ingredients(
         recipe_id INTEGER NOT NULL,
         ingredient_id INTEGER NOT NULL,
+        unit_id TEXT,
         quantity NUMERIC,
-        unit TEXT,
         PRIMARY KEY (recipe_id, ingredient_id),
         FOREIGN KEY (recipe_id) REFERENCES recipes (id),
         FOREIGN KEY (ingredient_id) REFERENCES ingredients (id)
+        FOREIGN KEY (unit_id) REFERENCES units (id)
     )
 """
 CREATE_RECIPE_INSTRUCTIONS_TABLE_SQL = """
@@ -33,6 +34,14 @@ CREATE_RECIPE_INSTRUCTIONS_TABLE_SQL = """
         instruction TEXT NOT NULL,
         PRIMARY KEY (recipe_id, step),
         FOREIGN KEY (recipe_id) REFERENCES recipes (id)
+    )
+"""
+CREATE_UNIT_TABLE_SQL = """
+    CREATE TABLE recipe_instructions(
+        id INTEGER NOT NULL,
+        name INTEGER NOT NULL,
+        plural TEXT NOT NULL,
+        PRIMARY KEY (id)
     )
 """
 

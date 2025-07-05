@@ -2,7 +2,7 @@
 name = "meal-plan"
 version = "0.1.0"
 description = ""
-authors = ["Kevin Andrus <kevin.andrus@flatiron.com>"]
+authors = ["Kevin Andrus <kevin.andrus@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]

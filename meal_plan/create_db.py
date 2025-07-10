@@ -37,7 +37,7 @@ CREATE_RECIPE_INSTRUCTIONS_TABLE_SQL = """
     )
 """
 CREATE_UNIT_TABLE_SQL = """
-    CREATE TABLE recipe_instructions(
+    CREATE TABLE units(
         id INTEGER NOT NULL,
         name INTEGER NOT NULL,
         plural TEXT NOT NULL,
@@ -45,14 +45,15 @@ CREATE_UNIT_TABLE_SQL = """
     )
 """
 
-def create_db(name: str):
-    conn = sqlite3.connect(name)
+def create_tables(db: str):
+    conn = sqlite3.connect(db)
     cur = conn.cursor()
     for sql in [
         CREATE_RECIPES_TABLE_SQL,
         CREATE_INGREDIENTS_TABLE_SQL,
         CREATE_RECIPE_INGREDIENTS_TABLE_SQL,
-        CREATE_RECIPE_INSTRUCTIONS_TABLE_SQL
+        CREATE_RECIPE_INSTRUCTIONS_TABLE_SQL,
+        CREATE_UNIT_TABLE_SQL,
     ]:
         cur.execute(sql)
         conn.commit()
@@ -69,5 +70,5 @@ if __name__ == "__main__":
         help="The name of the database to create."
     )
     args = parser.parse_args()
-    create_db(args.db_name)
+    create_tables(args.db_name)
 

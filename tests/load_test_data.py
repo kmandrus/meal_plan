@@ -78,13 +78,17 @@ TABLE_CONTENTS = {
 }
 
 
+def load_tables(conn, table_contents):
+    cursor = conn.cursor()
+    for table, rows in table_contents.items(): 
+        cursor.executemany(_to_insert_sql(table, rows[0].keys()), rows)
+        conn.commit()
+
+
 def main(db: str):
     conn = sqlite3.connect(db)
-    cur = conn.cursor()
     create_tables(db)
-    for table, rows in TABLE_CONTENTS.items(): 
-        cur.executemany(_to_insert_sql(table, rows[0].keys()), rows)
-        conn.commit()
+    load_tables(conn, TABLE_CONTENTS)
 
 
 if __name__ == "__main__":

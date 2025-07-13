@@ -45,8 +45,7 @@ CREATE_UNIT_TABLE_SQL = """
     )
 """
 
-def create_tables(db: str):
-    conn = sqlite3.connect(db)
+def create_tables(conn):
     cur = conn.cursor()
     for sql in [
         CREATE_RECIPES_TABLE_SQL,
@@ -56,7 +55,6 @@ def create_tables(db: str):
         CREATE_UNIT_TABLE_SQL,
     ]:
         cur.execute(sql)
-        conn.commit()
 
 
 if __name__ == "__main__":
@@ -70,5 +68,7 @@ if __name__ == "__main__":
         help="The name of the database to create."
     )
     args = parser.parse_args()
-    create_tables(args.db_name)
+    conn = sqlite3.connect(args.db_name)
+    create_tables(conn)
+    conn.commit()
 

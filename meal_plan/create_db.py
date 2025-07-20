@@ -1,5 +1,5 @@
-import sqlite3
 import argparse
+from meal_plan.utils import connect
 
 CREATE_RECIPES_TABLE_SQL = """
     CREATE TABLE recipes(
@@ -68,7 +68,7 @@ if __name__ == "__main__":
         help="The name of the database to create."
     )
     args = parser.parse_args()
-    conn = sqlite3.connect(args.db_name)
+    conn = connect(args.db_name)
     create_tables(conn)
     conn.commit()
 

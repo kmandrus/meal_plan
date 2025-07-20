@@ -1,5 +1,5 @@
 from typing import Iterable
-import sqlite3
+from meal_plan.utils import connect
 
 from meal_plan.create_db import create_tables
 
@@ -86,7 +86,7 @@ def load_tables(conn, table_contents):
 
 
 def main(db: str):
-    conn = sqlite3.connect(db)
+    conn = connect(db)
     create_tables(db)
     load_tables(conn, TABLE_CONTENTS)
 

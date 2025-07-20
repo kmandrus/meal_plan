@@ -1,4 +1,6 @@
-import sqlite3
+from sqlite3 import Row
+
+from meal_plan.utils import connect
 
 """
 A script for playing with results in the repl.
@@ -25,18 +27,12 @@ FROM recipe_ingredients
 """
 
 
-def get_cursor(db: str):
-    conn = sqlite3.connect(db)
-    conn.row_factory = sqlite3.Row
-    return conn.cursor()
-
-
 def print_query(results):
     for row in results:
         print(dict(row))
 
 
-cur = get_cursor('test.db')
+cur = connect('test.db').cursor()
 res = cur.execute(DISPLAY_RECIPE_INGREDIENTS_SQL).fetchall() 
 recipes = cur.execute("select * from recipes").fetchall()
 ingredients = cur.execute("select * from ingredients").fetchall()

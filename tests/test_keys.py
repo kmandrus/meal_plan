@@ -1,10 +1,11 @@
-from sqlite3 import connect, IntegrityError
+from sqlite3 import IntegrityError
 from pathlib import Path
 
 import pytest
 
 from tests.load_test_data import load_tables
 from meal_plan.create_db import create_tables
+from meal_plan.utils import connect
 
 
 @pytest.fixture

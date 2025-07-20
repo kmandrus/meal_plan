@@ -48,19 +48,56 @@ def test_id_col_is_primary_key_for_ingredients_table(conn):
         load_tables(conn, table_contents)
 
 
-def test_recipe_id_and_ingredient_id_form_primary_key_in_ingredients_table():
-    pass
+def test_recipe_id_and_ingredient_id_form_primary_key_in_recipe_ingredients_table(conn):
+    table_contents = {
+        "recipes": [
+            {"id": 1, "name": "Spaghetti", "description": None},
+            {"id": 2, "name": "Carbonana", "description": None},
+        ],
+        "ingredients": [
+            {"id": 1, "name": "sauce", "description": None},
+            {"id": 2, "name": "pasta", "description": None},
+            {"id": 3, "name": "onion", "description": None},
+        ],
+        "units": [
+            {"id": 1, "name": "cup", "plural": "cups"},
+        ],
+        "recipe_ingredients": [
+            {"recipe_id": 1, "ingredient_id": 1, "unit_id": 1, "quantity": 1}, 
+            {"recipe_id": 1, "ingredient_id": 2, "unit_id": 1, "quantity": 1,}, 
+            {"recipe_id": 2, "ingredient_id": 1, "unit_id": 1, "quantity": 1}, 
+            {"recipe_id": 2, "ingredient_id": 2, "unit_id": 1, "quantity": 1}, 
+        ],
+    }
+    load_tables(conn, table_contents)
+    with pytest.raises(
+        IntegrityError, 
+        match="UNIQUE constraint failed: recipe_ingredients.recipe_id, recipe_ingredients.ingredient_id"
+    ):
+        conn.cursor().execute("INSERT INTO recipe_ingredients VALUES(1, 1, 1, 1)")
 
 
-def test_recipe_id_in_recipe_ingredients_table_is_foreign_key_from_recipes_table():
-    pass
+def test_recipe_id_in_recipe_ingredients_table_is_foreign_key_from_recipes_table(conn):
+    # Figure out why this test doesn't raise an error.
+    table_contents = {
+        "ingredients": [
+            {"id": 1, "name": "sauce", "description": None},
+        ],
+        "units": [
+            {"id": 1, "name": "cup", "plural": "cups"},
+        ],
+        "recipe_ingredients": [
+            {"recipe_id": 1, "ingredient_id": 1, "unit_id": 1, "quantity": 1}, 
+        ],
+    }
+    load_tables(conn, table_contents)
 
 
 def test_ingredient_id_in_recipe_ingredients_table_is_foreign_key_from_ingredients_table():
     pass
 
 
-def test_unit_id_in_recipe_ingredients_table_is_foreign_key_from_unit_table():
+def test_unit_id_in_recipe_ingredients_table_is_foreign_key_from_units_table():
     pass
 
 

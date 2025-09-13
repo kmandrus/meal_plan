@@ -79,7 +79,6 @@ def test_recipe_id_and_ingredient_id_form_primary_key_in_recipe_ingredients_tabl
 
 
 def test_recipe_id_in_recipe_ingredients_table_is_foreign_key_from_recipes_table(conn):
-    # Figure out why this test doesn't raise an error.
     table_contents = {
         "ingredients": [
             {"id": 1, "name": "sauce", "description": None},
@@ -91,23 +90,75 @@ def test_recipe_id_in_recipe_ingredients_table_is_foreign_key_from_recipes_table
             {"recipe_id": 1, "ingredient_id": 1, "unit_id": 1, "quantity": 1}, 
         ],
     }
+    with pytest.raises(
+        IntegrityError,
+        match="FOREIGN KEY constraint failed",
+    ):
+        load_tables(conn, table_contents)
+
+
+def test_ingredient_id_in_recipe_ingredients_table_is_foreign_key_from_ingredients_table(conn):
+    table_contents = {
+        "recipes": [
+            {"id": 1, "name": "saucy chicken", "description": None}
+        ],
+        "units": [
+            {"id": 1, "name": "cup", "plural": "cups"},
+        ],
+        "recipe_ingredients": [
+            {"recipe_id": 1, "ingredient_id": 1, "unit_id": 1, "quantity": 1}, 
+        ],
+    }
+    with pytest.raises(
+        IntegrityError,
+        match="FOREIGN KEY constraint failed",
+    ):
+        load_tables(conn, table_contents)
+
+
+def test_unit_id_in_recipe_ingredients_table_is_foreign_key_from_units_table(conn):
+    table_contents = {
+        "recipes": [
+            {"id": 1, "name": "saucy chicken", "description": None}
+        ],
+        "ingredients": [
+            {"id": 1, "name": "sauce", "description": None},
+        ],
+        "recipe_ingredients": [
+            {"recipe_id": 1, "ingredient_id": 1, "unit_id": 1, "quantity": 1}, 
+        ],
+    }
+    with pytest.raises(
+        IntegrityError,
+        match="FOREIGN KEY constraint failed",
+    ):
+        load_tables(conn, table_contents)
+
+
+def test_recipe_id_and_step_form_primary_key_in_recipe_instructions_table(conn):
+    table_contents = {
+        "recipes": [
+            {"id": 1, "name": "saucy chicken", "description": None},
+        ],
+        "recipe_instructions": [
+            {"recipe_id": 1, "step": 1, "instruction": "make the sauce"},
+        ]
+        
+    }
     load_tables(conn, table_contents)
+    with pytest.raises(IntegrityError, match="UNIQUE constraint failed: recipe_instructions.recipe_id, recipe_instructions.step"):
+        conn.cursor().execute("INSERT INTO recipe_instructions VALUES(1, 1, 'chop chicken')")
 
 
-def test_ingredient_id_in_recipe_ingredients_table_is_foreign_key_from_ingredients_table():
-    pass
-
-
-def test_unit_id_in_recipe_ingredients_table_is_foreign_key_from_units_table():
-    pass
-
-
-def test_recipe_id_and_step_form_primary_key_in_recipe_instructions_table():
-    pass
-
-
-def test_recipe_id_in_recipe_instructions_table_is_foreign_key_from_recipes_table():
-    pass
+def test_recipe_id_in_recipe_instructions_table_is_foreign_key_from_recipes_table(conn):
+    table_contents = {
+        "recipe_instructions": [
+            {"recipe_id": 1, "step": 1, "instruction": "make the sauce"},
+        ]
+        
+    }
+    with pytest.raises(IntegrityError, match="FOREIGN KEY constraint failed"):
+        load_tables(conn, table_contents)
 
 
 def test_id_is_primary_key_in_units_table(conn):

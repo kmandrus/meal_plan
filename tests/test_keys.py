@@ -1,5 +1,4 @@
 from sqlite3 import IntegrityError
-from pathlib import Path
 
 import pytest
 
@@ -11,20 +10,14 @@ from meal_plan.utils import connect
 @pytest.fixture
 def conn():
     """ 
-    A connection to a empty sqlite database.
-
-    Is deleted after each use of the fixture. Not thread safe.
+    A connection to an empty, in-memory sqlite database.
     """
-    # when I have wifi, look up how to create a temporary file with pytest
-    db = "test.db"
-    test_db_path = Path(db)
-    test_db_path.unlink(missing_ok=True)
+    db = ":memory:"
     conn = connect(db)
     create_tables(conn)
     conn.commit()
     yield conn
     conn.close()
-    test_db_path.unlink()
 
 
 def test_id_col_is_primary_key_for_recipes_table(conn):
